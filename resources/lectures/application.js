@@ -9,7 +9,7 @@
     return;
   }
 
-  // Base-URL = Ordner, in dem application.js liegt!
+  // Base-URL = Ordner, in dem application.js liegt!!!!
   const scriptUrl = (document.currentScript && document.currentScript.src) ? document.currentScript.src : "";
   const baseUrl = scriptUrl ? new URL("./", scriptUrl).toString() : "";
   const rel = (p) => (baseUrl ? new URL(p, baseUrl).toString() : p);
@@ -70,6 +70,8 @@
           { id: "cms-manifest-registry", title: "Bausteine: Manifest, application.js & App Registry", src: rel("content/vertiefung/bausteine-manifest-registry.html") },
           { id: "cms-probleme-huerden", title: "Probleme & Hürden auf der Reise", src: rel("content/vertiefung/probleme-huerden.html") },
           { id: "cms-iframes", title: "Rendering: Pages als HTML via iframes", src: rel("content/vertiefung/rendering-iframes.html") }
+        ] },
+        { id: "empty", title: "Neuer Abschnitt", pages: [
         ] }
     ]
   };

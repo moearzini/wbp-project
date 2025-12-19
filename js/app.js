@@ -1,6 +1,101 @@
 /* =====================================================
    App Registry
 ===================================================== */
+
+window.APP_REGISTRY = {
+      lectures: {
+        id: "lectures",
+        type: "lecture",
+        path: "resources/lectures",
+        config: {
+          id: "lectures",
+          type: "lecture",
+          title: "Web Programming – Lectures",
+          icon: "book",
+          options: {
+            searchable: true,
+            window: { width: 1100, height: 650 }
+          },
+          manifest: "app.json"
+        }
+      },
+      "currency-converter": {
+        id: "currency-converter",
+        type: "tool",
+        path: "resources/currency-converter",
+        config: {
+          id: "currency-converter",
+          type: "tool",
+          title: "Currency Converter",
+          icon: "calculator",
+          options: { searchable: true, window: { width: 420, height: 360, resizable: false } }
+        }
+      },
+      "letter-counter": {
+        id: "letter-counter",
+        type: "tool",
+        path: "resources/letter-counter",
+        config: {
+          id: "letter-counter",
+          type: "tool",
+          title: "Buchstaben-Counter",
+          icon: "text",
+          options: { searchable: true, window: { width: 500, height: 430, resizable: false } }
+        }
+      },
+      contacts: {
+        id: "contacts",
+        type: "tool",
+        path: "resources/contacts",
+        config: {
+          id: "contacts",
+          type: "tool",
+          title: "Kontakte",
+          icon: "users",
+          options: { searchable: true, window: { width: 520, height: 480, resizable: false } }
+        }
+      },
+      accordeon: {
+        id: "accordeon",
+        type: "tool",
+        path: "resources/accordeon",
+        config: {
+          id: "accordeon",
+          type: "tool",
+          title: "Accordeon Demo",
+          icon: "list",
+          options: { searchable: true, window: { width: 520, height: 480, resizable: false } }
+        }
+      },
+      github: {
+        id: "github",
+        type: "tool",
+        path: "resources/github",
+        config: {
+          id: "github",
+          type: "tool",
+          title: "GitHub",
+          icon: "github",
+          options: { searchable: true, window: { width: 1100, height: 700, resizable: true } }
+        }
+      },
+      spotlight: {
+        id: "spotlight",
+        type: "system",
+        path: null,
+        config: {
+          id: "spotlight",
+          type: "system",
+          title: "Spotlight Search",
+          icon: "search",
+          options: {
+            searchable: false
+          }
+        },
+        keywords: ["search", "spotlight", "find", "cmd space"]
+      }
+    };
+
 const appRegistry = window.APP_REGISTRY || {};
 console.log("apps loaded:", Object.keys(appRegistry));
 
@@ -164,7 +259,6 @@ setInterval(updateMenuDateTime, 10000);
    Spotlight DOM
 ===================================================== */
 const spotlightOverlay = document.querySelector("#spotlight-overlay");
-// scoped query: erst im Overlay suchen, sonst fallback
 const spotlightBackdrop = spotlightOverlay?.querySelector(".spotlight-backdrop") || document.querySelector(".spotlight-backdrop");
 const spotlightPanel = spotlightOverlay?.querySelector(".spotlight-panel") || document.querySelector(".spotlight-panel");
 const spotlightInput = document.querySelector("#spotlight-input");
@@ -175,7 +269,6 @@ const spotlightItemTemplate = document.querySelector("#spotlight-item-template")
 /* =====================================================
    Help DOM
 ===================================================== */
-// scoped query wie bei Spotlight: erst im Overlay suchen, sonst fallback
 const helpOverlay = document.querySelector("#help-overlay");
 const helpBackdrop = helpOverlay?.querySelector(".help-backdrop") || document.querySelector(".help-backdrop");
 const helpPanel = helpOverlay?.querySelector(".help-panel") || document.querySelector(".help-panel");
@@ -194,14 +287,14 @@ function resetSpotlightPosition() {
 }
 
 function getDockIconForApp(appId) {
-  // Use the dock emoji/icon as the source of truth, so Spotlight matches the Dock style.
+  // Use the dock emoji/icon HOTFIX
   const dockBtn = document.querySelector(`.dock-item[data-app="${appId}"]`);
   if (!dockBtn) return "";
   return (dockBtn.textContent || "").trim();
 }
 
 function getSearchableApps() {
-  // nur apps + const searchable bool true
+  // nur apps + const searchable ist true
   return Object.values(appRegistry)
     .filter((a) => a && a.id && a.id !== "spotlight")
     .filter((a) => a.config?.options?.searchable === true);
@@ -436,11 +529,10 @@ document.addEventListener("keydown", (event) => {
     toggleSpotlight();
   }
 
-  // Escape schließt Spotlight oder Help
+  // Escape schließt Spotlight OR Help
   if (event.code === "Escape" && spotlightOverlay && !spotlightOverlay.hidden) {
     closeSpotlightAnimated();
   }
-
   if (event.code === "Escape" && helpOverlay && !helpOverlay.hidden) {
     closeHelpAnimated();
   }
@@ -564,7 +656,7 @@ function renderLecturesApp(app, container) {
 
     const title = document.createElement("div");
     title.className = "lecture-pane-title";
-    title.textContent = "Sections";
+    title.textContent = "Abschnitte";
     sectionsEl.appendChild(title);
 
     sections.forEach((section) => {
@@ -587,7 +679,7 @@ function renderLecturesApp(app, container) {
 
     const title = document.createElement("div");
     title.className = "lecture-pane-title";
-    title.textContent = "Pages";
+    title.textContent = "Seiten";
     pagesEl.appendChild(title);
 
     const section = getActiveSection();
