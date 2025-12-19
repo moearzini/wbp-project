@@ -5,6 +5,31 @@ const appRegistry = window.APP_REGISTRY || {};
 console.log("apps loaded:", Object.keys(appRegistry));
 
 /* =====================================================
+   Login Screen
+   - einfache UI-Freischaltung, kein sicherheitsaspekt
+===================================================== */
+const loginBtn = document.querySelector("#login-btn");
+
+if (loginBtn) {
+  loginBtn.addEventListener("click", () => {
+    // aktiviert UI (Header + Dock rein, Login weg)
+    document.body.classList.add("is-authenticated");
+
+    // Login Screen nach Animation aus DOM entfernen
+    const loginScreen = document.querySelector("#login-screen");
+    if (loginScreen) {
+      loginScreen.addEventListener(
+        "transitionend",
+        () => {
+          loginScreen.remove();
+        },
+        { once: true }
+      );
+    }
+  });
+}
+
+/* =====================================================
    App Manifest Loader
    - Lädt pro App optional ein resources/<app>/application.js
 ===================================================== */
@@ -429,6 +454,7 @@ let topZ = 10;
 let windowCount = 0;
 const openWindows = new Map(); // appId -> window element
 
+// Bring to front fction
 function bringToFront(win) {
   topZ += 1;
   win.style.zIndex = String(topZ);
