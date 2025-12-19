@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="utf-8">
+  <title>exercise2 count functions</title>
+  <style>
+    /* style copy paster block */
+    body { font-family: system-ui, Arial, sans-serif; margin: 20px; }
+    label { display:block; margin-top: 10px; }
+    input[type="text"] { padding: 6px; width: 100%; max-width: 520px; }
+    input.char { width: 60px; }
+    button { margin-top: 10px; padding: 6px 10px; }
+    pre { background:#f4f4f4; padding:10px; border:1px solid #ddd; white-space: pre-wrap; }
+    .card { max-width:520px;margin:0 auto;text-align:left; padding:15px; border:1px solid #e6e6e6; box-shadow:0 2px 5px rgba(0,0,0,0.1); border-radius:5px; }
+    #converter { margin-bottom: 10px; display:flex; flex-direction:column; gap:8px; }
+    #fromCurrency { width:100%;padding:6px; }
+    #amount { box-sizing:border-box;padding:6px;width:100%; }
+    #rate { margin-top:10px;color:#555;font-size:0.95rem;}
+    #result { margin-top:10px;background:#f9f9f9;padding:10px;border:1px solid #e6e6e6;}
+  </style>
+</head>
+<body>
+  <h1>Währungsumrechner</h1>
+  <p>Durch Auswahl der Währung <code>EUR/USD</code> kann in die gegenteilige Währung <strong>umgerechnet</strong> werden.</p>
+
+<div class="card">
+    <form id="converter">
+        <label>
+            Eingabe-Währung
+            <select id="fromCurrency">
+                <option value="EUR">EUR</option>
+                <option value="USD">USD</option>
+            </select>
+        </label>
+
+        <label>
+            Betrag
+            <input id="amount" type="text" inputmode="decimal" placeholder="0,00"/>
+        </label>
+
+        <button id="convertBtn" type="submit" style="padding:8px 10px;align-self:start;">Umrechnen</button>
+    </form>
+
+    <div id="rate"></div>
+    <pre id="result"></pre>
+</div>
+
+<script>
+(function(){
+    const RATE = 1.10; // 1 eur zu 1.1 usd
+    const form = document.getElementById('converter');
+    const fromSel = document.getElementById('fromCurrency');
+    const amountInput = document.getElementById('amount');
+    const result = document.getElementById('result');
+    const rateEl = document.getElementById('rate');
+
+    // formatierung von währungsbetrag (nachkommastellen und symbol)
+    function formatCurrency(value, currency) {
+        return new Intl.NumberFormat('de-DE', {
+            style: 'currency',
+            currency: currency,
+            minimumFractionDigits: 2,
+            maximumFractionDigits: 2
+        }).format(value);
+    }
+
+    // Deutsches komma punkt format regel
+    function parseInputValue(str) {
+        if (!str) return NaN;
+        let cleaned = String(str).replace(/[^\d\-,.]/g, '');
+        cleaned = cleaned.replace(/\.(?=\d{3}(\D|$))/g, '');
+        cleaned = cleaned.replace(',', '.');
+        return parseFloat(cleaned);
+    }
+
+    function updateRateText() {
+        rateEl.textContent = `Aktueller Kurs: 1 EUR = ${RATE.toFixed(2)} USD – ODER – 1 USD = ${(1 / RATE).toFixed(4)} EUR`;
+    }
+
+    amountInput.addEventListener('blur', () => {
+        const val = parseInputValue(amountInput.value);
+        if (!isNaN(val)) {
+            amountInput.value = formatCurrency(val, fromSel.value);
+        }
+    });
+
+    amountInput.addEventListener('focus', () => {
+        const val = parseInputValue(amountInput.value);
+        amountInput.value = !isNaN(val) ? val.toFixed(2) : '';
+    });
+
+    fromSel.addEventListener('change', () => {
+        const val = parseInputValue(amountInput.value);
+        if (!isNaN(val)) amountInput.value = formatCurrency(val, fromSel.value);
+        updateRateText();
+        result.textContent = '';
+    });
+
+    form.addEventListener('submit', (e) => {
+        e.preventDefault();
+        const from = fromSel.value;
+        const amount = parseInputValue(amountInput.value);
+
+        let converted, to;
+        if (from === 'EUR') {
+            converted = amount * RATE;
+            to = 'USD';
+        } else {
+            converted = amount / RATE;
+            to = 'EUR';
+        }
+
+        result.textContent = `${formatCurrency(amount, from)} → ${formatCurrency(converted, to)}`;
+    });
+
+    // refresh
+    updateRateText();
+    amountInput.value = '';
+})();
+</script>
+
+</body>
+</html>

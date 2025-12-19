@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="utf-8">
+  <title>exercise2 count functions</title>
+  <style>
+    /* style copy paster block */
+    body { font-family: system-ui, Arial, sans-serif; margin: 20px; }
+    label { display:block; margin-top: 10px; }
+    input[type="text"] { padding: 6px; width: 100%; max-width: 520px; }
+    input.char { width: 60px; }
+    button { margin-top: 10px; padding: 6px 10px; }
+    pre { background:#f4f4f4; padding:10px; border:1px solid #ddd; white-space: pre-wrap; }
+  </style>
+</head>
+<body>
+  <h1>Count Mount</h1>
+  <p>Bitte Text eingeben!! <code>countBs</code> zählt große <strong>B</strong>.
+    <code>countChar</code> zählt ein beliebiges Zeichen.</p>
+
+  <label for="text">Text</label>
+  <input id="text" type="text" placeholder="z. B. Stefan Noll">
+  
+  <label for="char">Zeichen (für countChar)</label>
+  <input id="char" class="char" type="text" maxlength="1" placeholder="z. B. B">
+
+  <div>
+    <button id="btn-count">Count</button>
+    <button id="btn-clear">Clear</button>
+  </div>
+
+  <h2>ausgabe</h2>
+  <pre id="out"></pre>
+
+  <script>
+    // char count func
+    const countChar = (str, zeichen) => {
+      let anzahl = 0;
+      for (let i = 0; i < str.length; i++) {
+        if (str[i] === zeichen) {
+          anzahl++;
+        }
+      }
+      return anzahl;
+    };
+
+    // countB func zählt nur B
+    const countBs = (str) => countChar(str, 'B');
+
+    // UI elmts
+    const textEl = document.getElementById('text');
+    const charEl = document.getElementById('char');
+    const outEl  = document.getElementById('out');
+
+    const zaehlen = () => {
+      const text = textEl.value ?? '';
+      const zeichen = (charEl.value || 'B').slice(0, 1); // falls b null
+
+      const bs = countBs(text);
+      const chars = countChar(text, zeichen);
+
+      const ausgabe =
+        'Text: ' + JSON.stringify(text) + '\n' +
+        'countBs (Anzahl der Bs): ' + bs + '\n' +
+        'countChar (' + zeichen + '): ' + chars;
+
+      outEl.textContent = ausgabe;
+
+      // console logging
+
+    };
+
+    const leeren = () => {
+      textEl.value = '';
+      charEl.value = '';
+      outEl.textContent = '';
+      console.clear();
+    };
+
+    // event handler
+    document.getElementById('btn-count').addEventListener('click', zaehlen);
+    document.getElementById('btn-clear').addEventListener('click', leeren);
+    textEl.addEventListener('keydown', (e) => { if (e.key === 'Enter') zaehlen(); });
+    charEl.addEventListener('keydown', (e) => { if (e.key === 'Enter') zaehlen(); });
+  </script>
+</body>
+</html>

@@ -1,0 +1,105 @@
+
+
+<!doctype html>
+<html lang="de">
+<head>
+  <meta charset="utf-8" />
+  <title>Vorlesung 1 – Motivation: Dynamische Webanwendungen</title>
+  <style>
+    body{
+      font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+      color:#1f2937;
+      line-height:1.55;
+    }
+    h1{
+      font-size:22px;
+      margin-bottom:6px;
+    }
+    h2{
+      font-size:16px;
+      margin-top:20px;
+      border-left:4px solid #7c3aed;
+      padding-left:8px;
+    }
+    ul{
+      margin-left:18px;
+    }
+    li{
+      margin:6px 0;
+    }
+    .note{
+      margin:12px 0;
+      padding:10px 12px;
+      background:#f5f3ff;
+      border:1px solid #e5e7eb;
+      border-radius:8px;
+      font-size:14px;
+    }
+    .meta{
+      color:#6b7280;
+      font-size:13px;
+      margin-bottom:16px;
+    }
+    .two-col{
+      display:grid;
+      grid-template-columns:1fr;
+      gap:12px;
+    }
+    @media (min-width: 760px){
+      .two-col{ grid-template-columns:1fr 1fr; }
+    }
+    .box{
+      border:1px solid #e5e7eb;
+      border-radius:8px;
+      padding:10px 12px;
+      background:#fff;
+    }
+  </style>
+</head>
+<body>
+
+<h1>Motivation: Dynamische Webanwendungen</h1>
+<div class="meta">Web-Programmierung · Vorlesung 1 · Einstieg über Deployment</div>
+
+<p>
+Die Motivation wurde über eine einfache Frage aufgebaut:
+<strong>Wie verteile/veröffentliche ich mein fertiges Programm (Deployment)?</strong>
+</p>
+
+<h2>Deployment: Installation vs. Web</h2>
+<div class="two-col">
+  <div class="box">
+    <strong>1) Klassisch: Installation (CD/Download)</strong>
+    <ul>
+      <li>Benutzer muss installieren & aktualisieren</li>
+      <li>Plattformabhängigkeiten (Windows/Mac/Linux)</li>
+      <li>Support-Aufwand steigt (Versionen, Fehler, Setup)</li>
+    </ul>
+  </div>
+
+  <div class="box">
+    <strong>2) Als Web-Anwendung</strong>
+    <ul>
+      <li>Keine Installation: Browser reicht</li>
+      <li>Updates zentral auf dem Server</li>
+      <li>Geräteunabhängig (solange Browser vorhanden)</li>
+    </ul>
+  </div>
+</div>
+
+<h2>Warum „dynamisch“?</h2>
+<ul>
+  <li>Die Seite reagiert auf Eingaben (z. B. Plausibilitätschecks, Dialoge)</li>
+  <li>Inhalte können im Browser geändert werden (über <strong>DOM</strong> + JavaScript)</li>
+  <li>Daten können im Hintergrund nachgeladen werden (asynchron, später: AJAX)</li>
+</ul>
+
+<div class="note">
+<strong>Merke:</strong><br>
+Die zentrale Frage dahinter ist immer auch: <strong>Wie sieht die Software-Architektur aus?</strong><br>
+Was läuft im Browser (Client) – und was läuft auf dem Server?
+</div>
+<br>
+
+</body>
+</html>

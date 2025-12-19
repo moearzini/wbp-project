@@ -1,0 +1,140 @@
+
+
+<!doctype html>
+<html lang="de">
+<head>
+  <meta charset="utf-8" />
+  <title>Vertiefung – Idee: CMS-Simulation nur mit JavaScript</title>
+  <style>
+    body{
+      font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+      color:#1f2937;
+      line-height:1.55;
+    }
+    h1{
+      font-size:22px;
+      margin-bottom:6px;
+    }
+    h2{
+      font-size:16px;
+      margin-top:20px;
+      border-left:4px solid #7c3aed;
+      padding-left:8px;
+    }
+    ul{
+      margin-left:18px;
+    }
+    li{
+      margin:6px 0;
+    }
+    .note{
+      margin:14px 0;
+      padding:12px 14px;
+      background:#f5f3ff;
+      border:1px solid #e5e7eb;
+      border-radius:8px;
+      font-size:14px;
+    }
+    .meta{
+      color:#6b7280;
+      font-size:13px;
+      margin-bottom:16px;
+    }
+    .diagram{
+      margin:16px 0;
+      padding:14px;
+      border:1px solid #e5e7eb;
+      border-radius:8px;
+      background:#fff;
+    }
+  </style>
+</head>
+<body>
+
+<h1>Idee: CMS-Simulation nur mit JavaScript</h1>
+<div class="meta">Vertiefung · Architektur & Systemverständnis</div>
+
+<p>
+Im Vertiefungsteil ging es nicht darum, ein klassisches CMS wie WordPress oder TYPO3
+nachzubauen. Ziel war vielmehr, das <strong>Prinzip eines Content-Management-Systems</strong>
+zu verstehen – und dieses Prinzip <strong>rein mit JavaScript</strong> zu simulieren.
+</p>
+
+<p>
+Das zentrale Lernziel dabei war:
+<strong>Wie kann Content strukturiert, verwaltet und gerendert werden, ohne ein Backend
+oder eine Datenbank zu verwenden?</strong>
+</p>
+
+<h2>Was macht ein CMS eigentlich?</h2>
+<ul>
+  <li>Inhalte sind <strong>strukturiert</strong> abgelegt (z. B. Seiten, Kapitel, Artikel)</li>
+  <li>Navigation und Struktur sind vom Inhalt getrennt</li>
+  <li>Der eigentliche Content wird <strong>dynamisch geladen</strong></li>
+</ul>
+
+<p>
+In unserem Projekt übernehmen genau diese Aufgaben
+<strong>Manifest-Dateien, JavaScript-Logik und HTML-Seiten</strong>.
+</p>
+
+<h2>Grundidee unserer Lösung</h2>
+<p>
+Statt eines Servers mit Datenbank nutzen wir:
+</p>
+<ul>
+  <li>eine zentrale <strong>App Registry</strong> (welche Apps existieren?)</li>
+  <li>ein <strong>Manifest</strong> (welche Sections & Pages gibt es?)</li>
+  <li>reine <strong>HTML-Seiten</strong> als Content</li>
+</ul>
+
+<div class="diagram">
+<svg viewBox="0 0 700 260" width="100%" height="auto" role="img" aria-label="CMS-Simulation Überblick">
+  <defs>
+    <style>
+      .box{fill:#ffffff;stroke:#e5e7eb;stroke-width:2}
+      .title{font:14px system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif; fill:#1f2937}
+      .sub{font:12px system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif; fill:#6b7280}
+      .arrow{stroke:#7c3aed;stroke-width:3;marker-end:url(#arrow)}
+    </style>
+    <marker id="arrow" markerWidth="10" markerHeight="10" refX="9" refY="3" orient="auto">
+      <path d="M0,0 L10,3 L0,6 Z" fill="#7c3aed" />
+    </marker>
+  </defs>
+
+  <rect class="box" x="30" y="60" width="190" height="120" rx="12"/>
+  <text class="title" x="50" y="90">App Registry</text>
+  <text class="sub" x="50" y="115">Welche App?</text>
+  <text class="sub" x="50" y="135">z. B. Lectures</text>
+
+  <rect class="box" x="255" y="40" width="200" height="160" rx="12"/>
+  <text class="title" x="275" y="70">Manifest / application.js</text>
+  <text class="sub" x="275" y="95">Sections</text>
+  <text class="sub" x="275" y="115">Pages</text>
+  <text class="sub" x="275" y="135">src → HTML</text>
+
+  <rect class="box" x="495" y="60" width="170" height="120" rx="12"/>
+  <text class="title" x="515" y="95">HTML-Seiten</text>
+  <text class="sub" x="515" y="120">reiner Content</text>
+
+  <line class="arrow" x1="220" y1="120" x2="255" y2="120"/>
+  <line class="arrow" x1="455" y1="120" x2="495" y2="120"/>
+</svg>
+</div>
+
+<h2>Warum ist das ein „CMS light“?</h2>
+<ul>
+  <li>Navigation entsteht aus der Struktur im Manifest</li>
+  <li>Content liegt getrennt in eigenen HTML-Dateien</li>
+  <li>Neue Seiten können ohne Codeänderung hinzugefügt werden</li>
+</ul>
+
+<div class="note">
+<strong>Merksatz für die Präsentation:</strong><br>
+Wir haben kein echtes CMS gebaut, sondern das <strong>Prinzip eines CMS verstanden
+und simuliert</strong> – nur mit JavaScript, Strukturdateien und HTML-Inhalten.
+</div>
+<br>
+
+</body>
+</html>

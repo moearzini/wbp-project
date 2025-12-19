@@ -1,0 +1,94 @@
+
+
+<!doctype html>
+<html lang="de">
+<head>
+  <meta charset="utf-8" />
+  <title>Vorlesung 1 – Grundlegende Web-Architekturen</title>
+  <style>
+    body{
+      font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+      color:#1f2937;
+      line-height:1.55;
+    }
+    h1{
+      font-size:22px;
+      margin-bottom:6px;
+    }
+    h2{
+      font-size:16px;
+      margin-top:20px;
+      border-left:4px solid #7c3aed;
+      padding-left:8px;
+    }
+    ul{
+      margin-left:18px;
+    }
+    li{
+      margin:6px 0;
+    }
+    .note{
+      margin:12px 0;
+      padding:10px 12px;
+      background:#f5f3ff;
+      border:1px solid #e5e7eb;
+      border-radius:8px;
+      font-size:14px;
+    }
+    .meta{
+      color:#6b7280;
+      font-size:13px;
+      margin-bottom:16px;
+    }
+    .diagram{
+      margin:14px 0;
+      padding:12px;
+      border:1px solid #e5e7eb;
+      border-radius:8px;
+      background:#fff;
+    }
+  </style>
+</head>
+<body>
+
+<h1>Grundlegende Web-Architekturen</h1>
+<div class="meta">Web-Programmierung · Vorlesung 1 · Client / Server</div>
+
+<p>
+Webanwendungen basieren fast immer auf einer <strong>Client-Server-Architektur</strong>.
+Die grundlegende Frage lautet:
+<strong>Wo läuft welche Logik?</strong>
+</p>
+
+<h2>Grundprinzip: Client & Server</h2>
+<ul>
+  <li><strong>Client:</strong> Browser des Nutzers (Darstellung & Interaktion)</li>
+  <li><strong>Server:</strong> Stellt Inhalte, Daten oder Funktionen bereit</li>
+  <li>Kommunikation meist über <strong>HTTP</strong></li>
+</ul>
+
+<div class="diagram">
+  <img
+    src="schaubild1.png"
+    alt="Schaubild: Grundlegende Client-Server-Webarchitektur"
+    style="max-width:100%; height:auto; display:block;"
+  />
+</div>
+
+<h2>Varianten (stark vereinfacht)</h2>
+<ul>
+  <li><strong>Dünner Client:</strong> Logik hauptsächlich auf dem Server</li>
+  <li><strong>Dicker Client:</strong> Viel Logik im Browser (JavaScript)</li>
+  <li>Moderne Webapps kombinieren meist beide Ansätze</li>
+</ul>
+
+<div class="note">
+<strong>Merke:</strong><br>
+Die Architektur entscheidet maßgeblich über <strong>Performance</strong>,
+<strong>Benutzerfreundlichkeit</strong> und <strong>Wartbarkeit</strong>
+einer Webanwendung.
+</div>
+<br>
+
+</body>
+</html>

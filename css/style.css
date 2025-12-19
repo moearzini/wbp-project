@@ -1,0 +1,759 @@
+/* ===== allg basis ===== */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI",
+               Roboto, Helvetica, Arial, sans-serif;
+  background: #f5f5f7;
+  color: #1d1d1f;
+  min-height: 100vh;
+}
+
+/* ===== desktop ===== */
+.desktop {
+  min-height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-image: url("../assets/wallpaper.jpg");
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  position: relative;
+  padding-top: 28px;
+}
+
+/* glass effekt desktop */
+.desktop::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(
+    ellipse at top,
+    rgba(255, 255, 255, 0.25),
+    rgba(0, 0, 0, 0.25)
+  );
+  pointer-events: none;
+}
+
+/* ===== fenster design ===== */
+.window {
+  max-width: 90%;
+  position: absolute;
+  display: flex;
+  flex-direction: column;
+  pointer-events: auto;
+  background: rgba(255, 255, 255, 0.78);
+  backdrop-filter: blur(22px) saturate(170%) contrast(110%);
+  -webkit-backdrop-filter: blur(22px) saturate(170%) contrast(110%);
+  border-radius: 18px;
+
+  border: 1px solid rgba(255, 255, 255, 0.24);
+  box-shadow:
+    0 35px 90px rgba(0, 0, 0, 0.30),
+    inset 0 1px 0 rgba(255, 255, 255, 0.55),
+    inset 0 -1px 0 rgba(0, 0, 0, 0.10);
+
+  overflow: hidden;
+}
+
+/* hervorhebung */
+.window::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background: radial-gradient(120% 140% at 20% 0%,
+    rgba(255, 255, 255, 0.28),
+    rgba(255, 255, 255, 0) 55%);
+  opacity: 0.9;
+}
+
+/* ===== fensterkopf ===== */
+.window-header {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px 14px;
+
+  background: rgba(255, 255, 255, 0.38);
+  backdrop-filter: blur(18px) saturate(170%);
+  -webkit-backdrop-filter: blur(18px) saturate(170%);
+
+  border-bottom: 1px solid rgba(255, 255, 255, 0.18);
+  position: relative;
+}
+
+.window-header::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  height: 1px;
+  background: rgba(0, 0, 0, 0.08);
+  opacity: 0.35;
+}
+
+.window-title {
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: rgba(29, 29, 31, 0.88);
+  user-select: none;
+}
+
+/* ===== macOS steuerelmnte ===== */
+.window-controls {
+  display: flex;
+  gap: 8px;
+  padding-left: 2px;
+}
+
+.control {
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+
+  border: 1px solid rgba(0, 0, 0, 0.18);
+
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.45),
+    inset 0 -1px 0 rgba(0, 0, 0, 0.12),
+    0 2px 6px rgba(0, 0, 0, 0.18);
+}
+
+.control.red {
+  background: radial-gradient(circle at 30% 30%,
+    #ff8a82,
+    #ff5f57 55%,
+    #e0443e 100%);
+}
+
+.control.yellow {
+  background: radial-gradient(circle at 30% 30%,
+    #ffd37a,
+    #febc2e 55%,
+    #d79a16 100%);
+}
+
+.control.green {
+  background: radial-gradient(circle at 30% 30%,
+    #7ef0a0,
+    #28c840 55%,
+    #1f9a32 100%);
+}
+
+/* ===== fenster cntent ===== */
+.window-content {
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  flex: 1;
+  min-height: 0;
+  overflow: hidden;
+}
+
+/* ===== spotlight ===== */
+.search-input {
+  width: 100%;
+  padding: 10px 14px;
+  border-radius: 10px;
+  border: none;
+  background: #f1f1f3;
+  font-size: 0.9rem;
+  outline: none;
+}
+
+.search-input::placeholder {
+  color: #8e8e93;
+}
+
+/* ===== WINDOW MANAGER (container) ===== */
+#window-manager {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+}
+
+/* ===== dockleiste ===== */
+.dock {
+  position: fixed;
+  bottom: 20px;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  gap: 11px;
+  padding: 13px 16px;
+
+  /* liquid glass (stack overflow) */
+  background: rgba(255, 255, 255, 0.20);
+  backdrop-filter: blur(28px) saturate(220%) contrast(110%);
+  -webkit-backdrop-filter: blur(28px) saturate(220%) contrast(110%);
+
+  border-radius: 19px;
+  border: 1px solid rgba(255, 255, 255, 0.28);
+
+  box-shadow:
+    0 30px 70px rgba(0, 0, 0, 0.28),
+    inset 0 1px 0 rgba(255, 255, 255, 0.55),
+    inset 0 -1px 0 rgba(0, 0, 0, 0.12);
+
+  overflow: hidden;
+}
+
+/* hervorhebungs anim */
+.dock::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background:
+    radial-gradient(120% 140% at 20% 0%,
+      rgba(255, 255, 255, 0.55),
+      rgba(255, 255, 255, 0) 60%),
+    radial-gradient(120% 160% at 80% 120%,
+      rgba(255, 255, 255, 0.18),
+      rgba(255, 255, 255, 0) 55%),
+    linear-gradient(180deg,
+      rgba(255, 255, 255, 0.18),
+      rgba(255, 255, 255, 0.06));
+  mix-blend-mode: screen;
+  opacity: 0.9;
+}
+
+/* randeffekt glass */
+.dock::after {
+  content: "";
+  position: absolute;
+  inset: 1px;
+  border-radius: 17px;
+  pointer-events: none;
+  border: 1px solid rgba(255, 255, 255, 0.22);
+  opacity: 0.9;
+}
+
+/* ===== Dock Apps ===== */
+.dock-item {
+  width: 45px;
+  height: 45px;
+  border-radius: 13px;
+  border: 1px solid rgba(255, 255, 255, 0.28);
+
+  /* glassy icon */
+  background: rgba(255, 255, 255, 0.22);
+  backdrop-filter: blur(16px) saturate(180%);
+  -webkit-backdrop-filter: blur(16px) saturate(180%);
+
+  font-size: 1.35rem;
+  cursor: pointer;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  box-shadow:
+    0 10px 18px rgba(0, 0, 0, 0.16),
+    inset 0 1px 0 rgba(255, 255, 255, 0.50),
+    inset 0 -1px 0 rgba(0, 0, 0, 0.10);
+
+  position: relative;
+  overflow: hidden;
+
+  transition:
+    transform 0.18s ease,
+    box-shadow 0.18s ease,
+    background 0.18s ease;
+}
+
+.dock-item::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background: radial-gradient(110% 120% at 25% 10%,
+    rgba(255, 255, 255, 0.55),
+    rgba(255, 255, 255, 0) 55%);
+  opacity: 0.8;
+}
+
+.dock-item:hover {
+  transform: translateY(-7px) scale(1.12);
+  background: rgba(255, 255, 255, 0.28);
+  box-shadow:
+    0 18px 30px rgba(0, 0, 0, 0.24),
+    inset 0 1px 0 rgba(255, 255, 255, 0.65),
+    inset 0 -1px 0 rgba(0, 0, 0, 0.12);
+}
+
+.dock-item:active {
+  transform: translateY(-4px) scale(1.06);
+}
+
+.dock-item:focus-visible {
+  outline: 2px solid rgba(255, 255, 255, 0.65);
+  outline-offset: 2px;
+}
+
+@media (min-width: 1600px) {
+  .dock {
+    bottom: 24px;
+    gap: 14px;
+    padding: 16px 20px;
+    border-radius: 24px;
+  }
+
+  .dock::after {
+    border-radius: 22px;
+  }
+
+  .dock-item {
+    width: 56px;
+    height: 56px;
+    border-radius: 16px;
+    font-size: 1.7rem;
+  }
+}
+
+/* ===== Spotlight ===== */
+#spotlight-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 1000;
+}
+
+#spotlight-overlay[hidden] {
+  display: none;
+}
+
+/* blurred background effect */
+.spotlight-backdrop {
+  position: absolute;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.35);
+  backdrop-filter: blur(6px);
+}
+
+/* Animation Pop in/out  */
+.spotlight-backdrop {
+  transition: opacity 180ms ease;
+}
+
+.spotlight-panel {
+  transition: transform 180ms ease, opacity 180ms ease;
+}
+
+#spotlight-overlay.is-closing .spotlight-backdrop {
+  opacity: 0;
+}
+
+#spotlight-overlay.is-closing .spotlight-panel {
+  opacity: 0;
+  transform: translateY(-10px) scale(0.98);
+}
+
+/* spotlight panel */
+.spotlight-panel {
+  position: relative;
+  margin: 15vh auto 0;
+  width: 600px;
+  max-width: 90%;
+  background: rgba(255, 255, 255, 0.9);
+  backdrop-filter: blur(14px);
+  border-radius: 18px;
+  box-shadow: 0 40px 80px rgba(0, 0, 0, 0.35);
+  padding: 16px;
+}
+
+/* spotlight feld */
+#spotlight-input {
+  width: 100%;
+  padding: 14px 16px;
+  border-radius: 12px;
+  border: none;
+  outline: none;
+  font-size: 1rem;
+  background: #f2f2f7;
+  margin-bottom: 12px;
+}
+
+#spotlight-input::placeholder {
+  color: #8e8e93;
+}
+
+/* spotlight output */
+#spotlight-results {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(92px, 1fr));
+  gap: 12px;
+  max-height: 40vh;
+  overflow-y: auto;
+  padding-top: 12px;
+}
+
+/* keine ergebnisse als p rendern */
+#spotlight-results > p {
+  grid-column: 1 / -1;
+  color: #6e6e73;
+  margin: 10px 0 0;
+}
+
+/* result items as app */
+.spotlight-item {
+  appearance: none;
+  border: 0;
+  background: transparent;
+  cursor: pointer;
+
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+
+  padding: 10px 8px;
+  border-radius: 12px;
+
+  color: inherit;
+  text-align: center;
+}
+
+.spotlight-item:hover {
+  background: rgba(255, 255, 255, 0.08);
+}
+
+.spotlight-item:active {
+  transform: scale(0.98);
+}
+
+.spotlight-item:focus-visible {
+  outline: 2px solid rgba(255, 255, 255, 0.25);
+  outline-offset: 2px;
+}
+
+/* icon bubble */
+.spotlight-item-icon {
+  width: 54px;
+  height: 54px;
+  border-radius: 14px;
+
+  display: grid;
+  place-items: center;
+
+  font-size: 30px;
+  line-height: 1;
+
+  background: rgba(255, 255, 255, 0.10);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.25);
+}
+
+/* label under icon */
+.spotlight-item-title {
+  font-size: 12px;
+  line-height: 1.2;
+  opacity: 0.92;
+
+  max-width: 100%;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* TWONOTE */
+.lecture-layout {
+  display: grid;
+  grid-template-columns: 220px 260px 1fr;
+  height: 100%;
+  min-height: 0;
+  gap: 0;
+}
+
+/* Abschnitte */
+.lecture-sections {
+  background: rgba(245, 245, 247, 0.9);
+  border-right: 1px solid rgba(0, 0, 0, 0.08);
+  padding: 12px;
+  overflow-y: auto;
+}
+
+/* Seiten */
+.lecture-pages {
+  background: rgba(250, 250, 252, 0.95);
+  border-right: 1px solid rgba(0, 0, 0, 0.06);
+  padding: 12px;
+  overflow-y: auto;
+}
+
+/* Pages Inhalt */
+.lecture-content {
+  background: #ffffff;
+  padding: 24px 28px;
+  height: 100%;
+
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
+}
+
+.lecture-pane-title {
+  font-size: 0.75rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  color: #6e6e73;
+  margin-bottom: 10px;
+}
+
+/* Section & Page items */
+.lecture-item {
+  width: 100%;
+  text-align: left;
+  padding: 8px 10px;
+  margin-bottom: 4px;
+  border-radius: 8px;
+  border: none;
+  background: transparent;
+  font-size: 0.85rem;
+  cursor: pointer;
+  color: #1d1d1f;
+}
+
+.lecture-item:hover {
+  background: rgba(0, 0, 0, 0.05);
+}
+
+.lecture-item.active {
+  background: rgba(0, 0, 0, 0.12);
+  font-weight: 600;
+}
+
+/* wenn leer */
+.lecture-empty {
+  font-size: 0.85rem;
+  color: #6e6e73;
+  padding: 8px;
+}
+
+.lecture-content-header {
+  margin-bottom: 16px;
+  border-bottom: 1px solid #e5e5ea;
+  padding-bottom: 10px;
+}
+
+.lecture-content-header h2 {
+  font-size: 1.2rem;
+  font-weight: 600;
+}
+
+/* Content body */
+.lecture-content-body {
+  font-size: 0.9rem;
+  line-height: 1.6;
+  flex: 1 1 auto;
+  min-height: 0;
+  height: 100%;
+}
+
+.lecture-page-frame {
+  width: 100%;
+  height: 100%;
+  border: 0;
+  display: block;
+}
+
+.lecture-content-body h2 {
+  margin-top: 20px;
+  margin-bottom: 10px;
+  font-size: 1.05rem;
+}
+
+.lecture-content-body p {
+  margin-bottom: 12px;
+}
+
+.window-content--lectures {
+  padding: 0;
+  gap: 0;
+  height: 100%;
+}
+
+/* ===== moeOS top menue bar ===== */
+.menu-bar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 28px;
+
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 14px;
+  background: rgba(255, 255, 255, 0.18);
+  backdrop-filter: blur(20px) saturate(180%);
+  -webkit-backdrop-filter: blur(20px) saturate(180%);
+  font-size: 0.8rem;
+  z-index: 2000;
+}
+
+.menu-left,
+.menu-right {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+
+.menu-logo {
+  font-size: 0.9rem;
+}
+
+.menu-brand {
+  font-weight: 600;
+}
+
+.menu-item {
+  background: transparent;
+  border: none;
+  font-size: 0.8rem;
+  cursor: pointer;
+  color: #1d1d1f;
+}
+
+.menu-item:hover {
+  text-decoration: underline;
+}
+
+#menu-datetime {
+  font-variant-numeric: tabular-nums;
+}
+
+/* ===== tool iframes forcer ===== */
+.tool-frame {
+  width: 100%;
+  height: 100%;
+  border: 0;
+  display: block;
+  flex: 1 1 auto;
+  min-height: 0;
+  background: transparent;
+}
+
+/* When a window-content iframe - padding remover force */
+.window-content:has(> .tool-frame) {
+  padding: 0;
+  gap: 0;
+}
+
+/* ===== Help Overlay ===== */
+#help-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 1100;
+}
+
+#help-overlay[hidden] {
+  display: none;
+}
+
+.help-backdrop {
+  position: absolute;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.35);
+  backdrop-filter: blur(6px);
+  transition: opacity 180ms ease;
+}
+
+.help-panel {
+  position: relative;
+  margin: 14vh auto 0;
+  width: 720px;
+  max-width: 92%;
+  background: rgba(255, 255, 255, 0.90);
+  backdrop-filter: blur(14px);
+  border-radius: 18px;
+  box-shadow: 0 40px 80px rgba(0, 0, 0, 0.35);
+  overflow: hidden;
+  transition: transform 180ms ease, opacity 180ms ease;
+}
+
+#help-overlay.is-closing .help-backdrop {
+  opacity: 0;
+}
+
+#help-overlay.is-closing .help-panel {
+  opacity: 0;
+  transform: translateY(-10px) scale(0.98);
+}
+
+.help-header {
+  height: 44px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  background: rgba(255, 255, 255, 0.55);
+  backdrop-filter: blur(18px) saturate(170%);
+  -webkit-backdrop-filter: blur(18px) saturate(170%);
+  border-bottom: 1px solid rgba(0, 0, 0, 0.08);
+}
+
+.help-title {
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: rgba(29, 29, 31, 0.88);
+  user-select: none;
+}
+
+.help-controls {
+  position: absolute;
+  left: 14px;
+  display: flex;
+  align-items: center;
+}
+
+.help-close {
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  border: 1px solid rgba(0, 0, 0, 0.18);
+  cursor: pointer;
+  background: radial-gradient(circle at 30% 30%,
+    #ff8a82,
+    #ff5f57 55%,
+    #e0443e 100%);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.45),
+    inset 0 -1px 0 rgba(0, 0, 0, 0.12),
+    0 2px 6px rgba(0, 0, 0, 0.18);
+}
+
+.help-close:focus-visible {
+  outline: 2px solid rgba(0, 0, 0, 0.25);
+  outline-offset: 3px;
+}
+
+.help-content {
+  padding: 18px 20px 22px;
+  color: #1d1d1f;
+}
+
+.help-content h2 {
+  font-size: 1.1rem;
+  margin-bottom: 10px;
+}
+
+.help-content ol {
+  padding-left: 18px;
+  line-height: 1.55;
+}
+
+.help-content li {
+  margin: 8px 0;
+}
+
+.help-tip {
+  margin-top: 14px;
+  opacity: 0.85; }

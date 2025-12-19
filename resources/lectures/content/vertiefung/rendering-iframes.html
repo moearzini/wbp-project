@@ -1,0 +1,145 @@
+
+
+<!doctype html>
+<html lang="de">
+<head>
+  <meta charset="utf-8" />
+  <title>Vertiefung – Rendering über iframes</title>
+  <style>
+    body{
+      font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+      color:#1f2937;
+      line-height:1.55;
+    }
+    h1{
+      font-size:22px;
+      margin-bottom:6px;
+    }
+    h2{
+      font-size:16px;
+      margin-top:20px;
+      border-left:4px solid #7c3aed;
+      padding-left:8px;
+    }
+    ul{
+      margin-left:18px;
+    }
+    li{
+      margin:6px 0;
+    }
+    .note{
+      margin:14px 0;
+      padding:12px 14px;
+      background:#f5f3ff;
+      border:1px solid #e5e7eb;
+      border-radius:8px;
+      font-size:14px;
+    }
+    .meta{
+      color:#6b7280;
+      font-size:13px;
+      margin-bottom:16px;
+    }
+    code{
+      font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+      font-size: 0.95em;
+      background: #f3f4f6;
+      padding: 0 6px;
+      border-radius: 6px;
+    }
+    pre{
+      background:#f9fafb;
+      border:1px solid #e5e7eb;
+      border-radius:8px;
+      padding:10px 12px;
+      overflow:auto;
+    }
+  </style>
+</head>
+<body>
+
+<h1>Rendering: Pages als HTML über iframes</h1>
+<div class="meta">Vertiefung · Content-Rendering & Architekturentscheidung</div>
+
+<p>
+Der letzte zentrale Baustein der CMS-Simulation ist das <strong>Rendering der Inhalte</strong>.
+Hierbei stellte sich die Frage, wie externe HTML-Seiten
+<strong>dynamisch und zuverlässig</strong> in die Anwendung geladen werden können –
+ohne Webserver und ohne Framework.
+</p>
+
+<h2>Warum nicht fetch()?</h2>
+<p>
+Ein naheliegender Ansatz wäre gewesen, die HTML-Dateien per
+<code>fetch()</code> zu laden und in den DOM einzufügen.
+Dies war jedoch im Projektkontext nicht praktikabel.
+</p>
+<ul>
+  <li><strong>file://</strong>-Umgebung ohne Server</li>
+  <li>CORS-Beschränkungen (Origin <code>null</code>)</li>
+  <li>instabiles oder blockiertes Laden externer Dateien</li>
+</ul>
+
+<h2>Entscheidung für iframes</h2>
+<p>
+Als robuste Alternative wurde das Rendering über <strong>iframes</strong> gewählt.
+Dabei wird jede Seite als eigenständiges HTML-Dokument eingebettet.
+</p>
+<ul>
+  <li>Browser übernimmt das Laden der Datei</li>
+  <li>keine CORS-Probleme bei lokalen Dateien</li>
+  <li>klare Trennung zwischen App-Logik und Content</li>
+</ul>
+
+<h2>Technische Umsetzung (vereinfacht)</h2>
+<p>
+Beim Klick auf eine Page wird das entsprechende HTML-Dokument
+in einem iframe geladen:
+</p>
+
+<pre><code>// app.js (vereinfacht)
+if (page.src) {
+  const iframe = document.createElement("iframe");
+  iframe.src = page.src + "?embed=1";
+  iframe.style.width = "100%";
+  iframe.style.height = "100%";
+  contentEl.appendChild(iframe);
+}
+</code></pre>
+
+<p>
+Der zusätzliche Parameter <code>?embed=1</code> erlaubt es der eingebetteten Seite,
+ihren eigenen Titel auszublenden und sich nahtlos in die App einzufügen.
+</p>
+
+<h2>Vor- und Nachteile dieses Ansatzes</h2>
+<ul>
+  <li><strong>Vorteile:</strong> stabil, einfach, serverlos, sauber getrennte Inhalte</li>
+  <li><strong>Nachteile:</strong> begrenzte Interaktion zwischen App und Content</li>
+  <li>keine direkte DOM-Manipulation über App-Grenzen hinweg</li>
+</ul>
+
+<h2>Warum passt das trotzdem zur CMS-Idee?</h2>
+<p>
+Auch klassische CMS-Systeme trennen streng zwischen:
+</p>
+<ul>
+  <li>Systemlogik (Navigation, Struktur, Rechte)</li>
+  <li>Inhalten (Seiten, Texte, Medien)</li>
+</ul>
+
+<p>
+Das iframe übernimmt in dieser Simulation genau diese Rolle:
+Es kapselt den Content und macht ihn unabhängig vom restlichen System.
+</p>
+
+<div class="note">
+<strong>Abschließender Gedanke:</strong><br>
+Durch die Kombination aus Manifest, App Registry und iframe-basiertem Rendering
+konnten wir zentrale CMS-Konzepte verstehen und praktisch umsetzen –
+bewusst reduziert, aber architektonisch sauber.
+</div>
+<br>
+
+</body>
+</html>

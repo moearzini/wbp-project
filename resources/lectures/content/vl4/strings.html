@@ -1,0 +1,91 @@
+<!doctype html>
+<html lang="de">
+<head>
+  <meta charset="utf-8" />
+  <title>Strings: wichtige Operationen</title>
+  <style>
+    body{
+      font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+      color:#1f2937;
+      line-height:1.55;
+    }
+    h1{
+      font-size:22px;
+      margin-bottom:6px;
+    }
+    h2{
+      font-size:16px;
+      margin-top:20px;
+      border-left:4px solid #7c3aed;
+      padding-left:8px;
+    }
+    ul{
+      margin-left:18px;
+    }
+    li{
+      margin:6px 0;
+    }
+    .note{
+      margin:12px 0;
+      padding:10px 12px;
+      background:#f5f3ff;
+      border:1px solid #e5e7eb;
+      border-radius:8px;
+      font-size:14px;
+    }
+    .meta{
+      color:#6b7280;
+      font-size:13px;
+      margin-bottom:16px;
+    }
+    .box{
+      border:1px solid #e5e7eb;
+      border-radius:8px;
+      padding:10px 12px;
+      background:#fff;
+      margin:12px 0;
+    }
+    .sources{
+      margin-top:18px;
+      font-size:13px;
+      color:#4b5563;
+    }
+    .sources ul{ margin-left:18px; }
+    code{
+      font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+      font-size: 0.95em;
+      background: #f3f4f6;
+      padding: 0 6px;
+      border-radius: 6px;
+    }
+    /* Wenn die Seite im App-Iframe eingebettet ist, blendet die App den Titel bereits aus */
+    html.embedded h1,
+    html.embedded .meta{
+      display:none;
+    }
+  </style>
+  <script>
+    (() => {
+      const params = new URLSearchParams(window.location.search);
+      if (params.get("embed") === "1") document.documentElement.classList.add("embedded");
+    })();
+  </script>
+</head>
+<body>
+
+<h1>Strings: wichtige Operationen</h1>
+<div class="meta">Web-Programmierung · Vorlesung 4 · Strings</div>
+
+
+<p>Start der Sitzung: <strong>Strings</strong> – praktisch überall im Web (Ausgabe, Eingaben, DOM).</p>
+<h2>Wichtige Punkte</h2>
+<ul>
+  <li>Strings sind in JS häufige Arbeitsgrundlage (Ausgabe, Verarbeitung, Anzeige).</li>
+  <li>Typische Aufgaben: Suchen/Ersetzen, Teilstrings, Länge, Concatenation.</li>
+  <li>Viele String-Operationen sind Methoden (kommt mit Objekt-Feeling).</li>
+</ul>
+<div class="note"><strong>Notiz:</strong><br>Strings sind zwar „einfach“, aber Fehler passieren oft bei Eingaben (Leerzeichen, Format, etc.).</div>
+
+
+</body>
+</html>

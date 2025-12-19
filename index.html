@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>MoeOS WebProg Version 1</title>
+
+  <link rel="stylesheet" href="css/style.css" />
+</head>
+<body>
+
+  <div class="desktop">
+    <!-- MoeOS header bar -->
+    <header class="menu-bar" role="banner">
+      <div class="menu-left">
+        <span class="menu-logo" aria-hidden="true"></span>
+        <span class="menu-brand">MoeOS</span>
+        <button class="menu-item" id="menu-guide" type="button">Anleitung</button>
+        <button class="menu-item" id="menu-help" type="button">Hilfe</button>
+      </div>
+
+      <div class="menu-right" aria-label="Date and time">
+        <span id="menu-datetime">--:--</span>
+      </div>
+    </header>
+
+    <!-- window container -->
+    <div id="window-manager"></div>
+
+    <!-- MoeOS dock -->
+    <div class="dock">
+      <button class="dock-item" data-app="spotlight" aria-label="Spotlight Search">🔍</button>
+      <button class="dock-item" data-app="lectures" aria-label="Lectures">📘</button>
+      <button class="dock-item" data-app="currency-converter" aria-label="Currency Converter">🧮</button>
+      <button class="dock-item" data-app="letter-counter" aria-label="Buchstaben-Counter">🔤</button>
+      <button class="dock-item" data-app="contacts" aria-label="Kontakte">👥</button>
+      <button class="dock-item" data-app="accordeon" aria-label="Accordeon Demo">🪗</button>
+      <button class="dock-item" data-app="github" aria-label="GitHub">🐙</button>
+    </div>
+  </div>
+
+  <!-- spotlight suchfunktion -->
+  <div id="spotlight-overlay" hidden>
+    <div class="spotlight-backdrop"></div>
+
+    <div class="spotlight-panel" role="dialog" aria-label="Spotlight Search">
+      <input
+        type="text"
+        id="spotlight-input"
+        placeholder="Apps suchen…"
+        autocomplete="off"
+        spellcheck="false"
+      />
+
+      <div id="spotlight-results" class="spotlight-results" role="list"></div>
+
+      <!-- spotlight app results container -->
+      <template id="spotlight-item-template">
+        <button class="spotlight-item" type="button" role="listitem" data-app="">
+          <span class="spotlight-item-icon" aria-hidden="true"></span>
+          <span class="spotlight-item-title"></span>
+        </button>
+      </template>
+    </div>
+  </div>
+
+  <!-- help overlay -->
+  <div id="help-overlay" hidden>
+    <div class="help-backdrop"></div>
+
+    <div class="help-panel" role="dialog" aria-label="MoeOS Hilfe">
+      <div class="help-header" aria-label="Fensterleiste">
+        <div class="help-controls" aria-hidden="true">
+          <button class="help-close" type="button" aria-label="Schließen"></button>
+        </div>
+        <div class="help-title">MoeOS – Kurzanleitung</div>
+      </div>
+
+      <div class="help-content">
+        <h2>So benutzt du MoeOS</h2>
+        <ol>
+          <li><strong>Apps öffnen:</strong> Klicke unten im Dock auf ein App-Icon (z. B. Kontakte, Rechner, GitHub).</li>
+          <li><strong>Spotlight-Suche:</strong> Öffne Spotlight über das 🔍 im Dock oder mit <strong>Cmd + Shift + Space</strong>. Tippe den App-Namen und klicke ein Ergebnis.</li>
+          <li><strong>Fenster bewegen:</strong> Ziehe ein Fenster am oberen Header. Fenster bleiben im Bildschirm-Rahmen.</li>
+          <li><strong>Fenster schließen:</strong> Klicke oben links auf den roten Button.</li>
+          <li><strong>Mehrere Fenster:</strong> Du kannst mehrere Apps parallel öffnen und zwischen ihnen wechseln.</li>
+        </ol>
+
+        <p class="help-tip">Tipp: Wenn etwas „hängt“, schließe das Fenster und öffne die App erneut.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- lokaler und app register -->
+  <script>
+    window.APP_REGISTRY = {
+      lectures: {
+        id: "lectures",
+        type: "lecture",
+        path: "resources/lectures",
+        config: {
+          id: "lectures",
+          type: "lecture",
+          title: "Web Programming – Lectures",
+          icon: "book",
+          options: {
+            searchable: true,
+            window: { width: 1100, height: 650 }
+          },
+          manifest: "app.json"
+        }
+      },
+      "currency-converter": {
+        id: "currency-converter",
+        type: "tool",
+        path: "resources/currency-converter",
+        config: {
+          id: "currency-converter",
+          type: "tool",
+          title: "Currency Converter",
+          icon: "calculator",
+          options: { searchable: true, window: { width: 420, height: 360, resizable: false } }
+        }
+      },
+      "letter-counter": {
+        id: "letter-counter",
+        type: "tool",
+        path: "resources/letter-counter",
+        config: {
+          id: "letter-counter",
+          type: "tool",
+          title: "Buchstaben-Counter",
+          icon: "text",
+          options: { searchable: true, window: { width: 500, height: 430, resizable: false } }
+        }
+      },
+      contacts: {
+        id: "contacts",
+        type: "tool",
+        path: "resources/contacts",
+        config: {
+          id: "contacts",
+          type: "tool",
+          title: "Kontakte",
+          icon: "users",
+          options: { searchable: true, window: { width: 520, height: 480, resizable: false } }
+        }
+      },
+      accordeon: {
+        id: "accordeon",
+        type: "tool",
+        path: "resources/accordeon",
+        config: {
+          id: "accordeon",
+          type: "tool",
+          title: "Accordeon Demo",
+          icon: "list",
+          options: { searchable: true, window: { width: 520, height: 480, resizable: false } }
+        }
+      },
+      github: {
+        id: "github",
+        type: "tool",
+        path: "resources/github",
+        config: {
+          id: "github",
+          type: "tool",
+          title: "GitHub",
+          icon: "github",
+          options: { searchable: true, window: { width: 1100, height: 700, resizable: true } }
+        }
+      },
+      spotlight: {
+        id: "spotlight",
+        type: "system",
+        path: null,
+        config: {
+          id: "spotlight",
+          type: "system",
+          title: "Spotlight Search",
+          icon: "search",
+          options: {
+            searchable: false
+          }
+        },
+        keywords: ["search", "spotlight", "find", "cmd space"]
+      }
+    };
+  </script>
+
+  <!-- load operation system -->
+  <script src="js/app.js" defer></script>
+
+</body>
+</html>

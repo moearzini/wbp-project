@@ -1,0 +1,415 @@
+<!doctype html>
+<html lang="de">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>Exercise 4 V2 — Kontakte</title>
+
+    <style>
+        body {
+            font-family: Arial, Helvetica, sans-serif;
+            background: #f4f6f8;
+            padding: 20px;
+            display: flex;
+            justify-content: center;
+        }
+        .card {
+            width: 900px;
+            background: #ffffff;
+            padding: 16px;
+            border-radius: 8px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+        }
+        .row {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 10px;
+        }
+        .col {
+            flex: 1;
+        }
+        label {
+            font-size: 13px;
+            color: #444;
+            margin-bottom: 4px;
+            display: block;
+        }
+        input {
+            padding: 8px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            width: 100%;
+            box-sizing: border-box;
+        }
+        button {
+            padding: 8px 12px;
+            border: 0;
+            border-radius: 4px;
+            background: #0078d4;
+            color: #ffffff;
+            cursor: pointer;
+            font-size: 14px;
+        }
+        button.secondary {
+            background: #6c757d;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 12px;
+        }
+        th, td {
+            padding: 8px;
+            text-align: left;
+            border-bottom: 1px solid #eeeeee;
+            font-size: 14px;
+        }
+        .small {
+            font-size: 13px;
+            color: #555555;
+        }
+        pre {
+            background: #f1f3f5;
+            padding: 10px;
+            border-radius: 4px;
+            overflow: auto;
+            font-size: 13px;
+            white-space: pre-wrap;
+        }
+    </style>
+</head>
+<body>
+    <div class="card">
+        <h1>Kontakte</h1>
+
+        <!-- Inputmask -->
+        <div class="row">
+            <div class="col">
+                <label for="vorname">Vorname</label>
+                <input id="vorname" type="text" />
+            </div>
+            <div class="col">
+                <label for="nachname">Nachname</label>
+                <input id="nachname" type="text" />
+            </div>
+            <div class="col">
+                <label for="mobil">Tel. mobil</label>
+                <input id="mobil" type="text" />
+            </div>
+            <div class="col">
+                <label for="email">E-Mail</label>
+                <input id="email" type="email" />
+            </div>
+        </div>
+
+        <!-- Actbttns -->
+        <div style="display:flex;gap:8px;align-items:center;margin-bottom:12px">
+            <button id="createBtn">Kontakt erstellen</button>
+            <button id="checkUserBtn">Check-User</button>
+            <button id="promptBtn" class="secondary">Per Prompt</button>
+            <button id="sampleBtn" class="secondary">Beispiele</button>
+            <div style="margin-left:auto" class="small">
+                Anzahl Kontakte: <span id="gesamtZahl">0</span>
+            </div>
+        </div>
+
+        <!-- database -->
+        <table id="contactsTable">
+            <thead>
+                <tr>
+                    <th>#</th>
+                    <th>Vorname</th>
+                    <th>Nachname</th>
+                    <th>Tel. mobil</th>
+                    <th>E-Mail</th>
+                    <th>Aktion</th>
+                </tr>
+            </thead>
+            <tbody></tbody>
+        </table>
+
+        <h2 class="small">Ausgabe</h2>
+        <pre id="output" aria-live="polite"></pre>
+    </div>
+
+    <script>
+        // Kontakt class
+        class Kontakt {
+            // static V - Anzahl Datenstze
+            static gesamtZahl = 0;
+
+            // Eigenschaften
+            #laufendeNummer;
+            #vorname;
+            #nachname;
+            #mobil;
+            #email;
+
+            constructor(vorname, nachname, mobil, email) {
+                // constrctor (+1 contact counter)
+                this.#laufendeNummer = ++Kontakt.gesamtZahl;
+                this.#vorname = vorname;
+                this.#nachname = nachname;
+                this.#mobil = mobil;
+                this.#email = email;
+            }
+
+            // Getter / Setter
+            get laufendeNummer() {
+                return this.#laufendeNummer;
+            }
+
+            get vorname() {
+                return this.#vorname;
+            }
+            set vorname(neuerVorname) {
+                this.#vorname = neuerVorname;
+            }
+
+            get nachname() {
+                return this.#nachname;
+            }
+            set nachname(neuerNachname) {
+                this.#nachname = neuerNachname;
+            }
+
+            get mobil() {
+                return this.#mobil;
+            }
+            set mobil(neueMobilnummer) {
+                this.#mobil = neueMobilnummer;
+            }
+
+            get email() {
+                return this.#email;
+            }
+            set email(neueEmail) {
+                this.#email = neueEmail;
+            }
+
+            // checkUser: compare vorname, nachname mit eingabe
+            checkUser(vorname, nachname) {
+                if (!vorname || !nachname) {
+                    return false;
+                }
+                var vorObjekt = this.#vorname.toLowerCase();
+                var nachObjekt = this.#nachname.toLowerCase();
+                var vorEingabe = vorname.toLowerCase();
+                var nachEingabe = nachname.toLowerCase();
+
+                return vorObjekt === vorEingabe && nachObjekt === nachEingabe;
+            }
+        }
+
+        var contacts = [];
+        var tbody = document.querySelector("#contactsTable tbody");
+        var gesamtZahlEl = document.getElementById("gesamtZahl");
+        var output = document.getElementById("output");
+
+        // escaper html chars
+        function escapeHtml(s) {
+            return String(s || "").replace(/[&<>"']/g, function(ch) {
+                var map = {
+                    "&": "&amp;",
+                    "<": "&lt;",
+                    ">": "&gt;",
+                    "\"": "&quot;",
+                    "'": "&#39;"
+                };
+                return map[ch];
+            });
+        }
+
+        // database list
+        function renderList() {
+            tbody.innerHTML = "";
+
+            for (var i = 0; i < contacts.length; i++) {
+                var kontakt = contacts[i];
+                var tr = document.createElement("tr");
+
+                tr.innerHTML =
+                    "<td>" + kontakt.laufendeNummer + "</td>" +
+                    "<td>" + escapeHtml(kontakt.vorname) + "</td>" +
+                    "<td>" + escapeHtml(kontakt.nachname) + "</td>" +
+                    "<td>" + escapeHtml(kontakt.mobil) + "</td>" +
+                    "<td>" + escapeHtml(kontakt.email) + "</td>" +
+                    "<td><button data-nr=\"" + kontakt.laufendeNummer +
+                    "\">anzeigen</button></td>";
+
+                tbody.appendChild(tr);
+            }
+
+            // output var gesamtZahl
+            gesamtZahlEl.textContent = Kontakt.gesamtZahl;
+        }
+
+        // createFromForm kontakt anlegen
+        function createFromForm() {
+            var vor = document.getElementById("vorname").value.trim();
+            var nach = document.getElementById("nachname").value.trim();
+            var mobil = document.getElementById("mobil").value.trim();
+            var email = document.getElementById("email").value.trim();
+
+            if (!vor && !nach) {
+                output.textContent = "Bitte mindestens Vor- oder Nachname eingeben.";
+                return;
+            }
+
+            var kontakt = new Kontakt(vor, nach, mobil, email);
+            contacts.push(kontakt);
+            renderList();
+
+            output.textContent =
+                "Kontakt erstellt: " + kontakt.vorname + " " + kontakt.nachname +
+                " (laufende Nummer: " + kontakt.laufendeNummer + ")";
+
+            // clear flds
+            document.getElementById("vorname").value = "";
+            document.getElementById("nachname").value = "";
+            document.getElementById("mobil").value = "";
+            document.getElementById("email").value = "";
+        }
+
+        // add contact per pop-up prmt
+        function createByPrompt() {
+            var vor = prompt("Vorname", "Max");
+            if (vor === null) {
+                return;
+            }
+            var nach = prompt("Nachname", "") || "";
+            var mobil = prompt("Tel. mobil", "") || "";
+            var email = prompt("E-Mail", "") || "";
+
+            var kontakt = new Kontakt(vor, nach, mobil, email);
+            contacts.push(kontakt);
+            renderList();
+
+            output.textContent =
+                "Kontakt erstellt: " + kontakt.vorname + " " + kontakt.nachname +
+                " (laufende Nummer: " + kontakt.laufendeNummer + ")";
+        }
+
+        // add examples
+        function createSamples() {
+            var examples = [
+                { vorname: "Anna",   nachname: "Schmidt", mobil: "+49 170 1111111", email: "anna@example.de" },
+                { vorname: "Jörg",   nachname: "Meier",   mobil: "+49 170 2222222", email: "joerg@example.de" },
+                { vorname: "Fatima", nachname: "Khan",    mobil: "+49 170 3333333", email: "fatima@example.de" }
+            ];
+
+            for (var i = 0; i < examples.length; i++) {
+                var e = examples[i];
+                var kontakt = new Kontakt(e.vorname, e.nachname, e.mobil, e.email);
+                contacts.push(kontakt);
+            }
+
+            renderList();
+            output.textContent =
+                "Beispielkontakte hinzugefügt. Gesamtzahl: " + Kontakt.gesamtZahl;
+        }
+
+        // Globaler Check-User: nach einem Suchwert suchen
+        function checkUserGlobal() {
+            if (contacts.length === 0) {
+                output.textContent = "Es sind noch keine Kontakte gespeichert.";
+                return;
+            }
+
+            var suchwert = prompt(
+                "Suchwert eingeben (kann jedes Attribut sein)",
+                ""
+            );
+            if (suchwert === null) {
+                return;
+            }
+            suchwert = suchwert.trim();
+            if (!suchwert) {
+                output.textContent = "ERR: Kein Suchwert eingegeben.";
+                return;
+            }
+
+            var suchwertKlein = suchwert.toLowerCase();
+            var treffer = [];
+
+            // If Leerzeichen da, Split & Vergleich Vor- Nachname
+            var teile = suchwertKlein.split(" ");
+            if (teile.length === 2 && teile[0] && teile[1]) {
+                var vorSuch = teile[0];
+                var nachSuch = teile[1];
+
+                for (var i = 0; i < contacts.length; i++) {
+                    var k = contacts[i];
+                    if (k.checkUser(vorSuch, nachSuch)) {
+                        treffer.push(k);
+                    }
+                }
+            } else {
+                // sonst 1 zu 1 vergleich bruteforce
+                for (var j = 0; j < contacts.length; j++) {
+                    var k2 = contacts[j];
+                    if ((k2.vorname && k2.vorname.toLowerCase() === suchwertKlein) ||
+                        (k2.nachname && k2.nachname.toLowerCase() === suchwertKlein) ||
+                        (k2.mobil && k2.mobil.toLowerCase() === suchwertKlein) ||
+                        (k2.email && k2.email.toLowerCase() === suchwertKlein)) {
+                        treffer.push(k2);
+                    }
+                }
+            }
+
+            if (treffer.length === 0) {
+                output.textContent = "Kein Treffer für \"" + suchwert + "\".";
+            } else {
+                var text = "Treffer für \"" + suchwert + "\":\n\n";
+                for (var t = 0; t < treffer.length; t++) {
+                    var k3 = treffer[t];
+                    text += "Kontakt " + k3.laufendeNummer + ":\n" +
+                            (k3.vorname || "") + " " + (k3.nachname || "") + "\n" +
+                            "Tel. mobil: " + (k3.mobil || "") + "\n" +
+                            "E-Mail: " + (k3.email || "") + "\n\n";
+                }
+                output.textContent = text;
+            }
+        }
+
+        // ctc anzeigen (popup)
+        tbody.addEventListener("click", function(ev) {
+            var btn = ev.target.closest("button");
+            if (!btn) {
+                return;
+            }
+
+            var laufendeNummer = Number(btn.getAttribute("data-nr"));
+            var kontakt = null;
+
+            // laufende nummer search (unique id)
+            for (var i = 0; i < contacts.length; i++) {
+                if (contacts[i].laufendeNummer === laufendeNummer) {
+                    kontakt = contacts[i];
+                    break;
+                }
+            }
+            if (!kontakt) {
+                return;
+            }
+
+            var text = "Kontakt " + kontakt.laufendeNummer + ":\n" +
+                (kontakt.vorname || "") + " " + (kontakt.nachname || "") + "\n" +
+                "Tel. mobil: " + (kontakt.mobil || "") + "\n" +
+                "E-Mail: " + (kontakt.email || "");
+
+            // execute popup
+            alert(text);
+
+            // ausgabe via console
+            output.textContent = text;
+        });
+
+        // functs bindings
+        document.getElementById("createBtn").addEventListener("click", createFromForm);
+        document.getElementById("checkUserBtn").addEventListener("click", checkUserGlobal);
+        document.getElementById("promptBtn").addEventListener("click", createByPrompt);
+        document.getElementById("sampleBtn").addEventListener("click", createSamples);
+    </script>
+</body>
+</html>

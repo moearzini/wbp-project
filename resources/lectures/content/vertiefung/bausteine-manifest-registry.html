@@ -1,0 +1,201 @@
+<!doctype html>
+<html lang="de">
+<head>
+  <meta charset="utf-8" />
+  <title>Vertiefung – Bausteine: Manifest, application.js & App Registry</title>
+  <style>
+    body{
+      font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+      color:#1f2937;
+      line-height:1.55;
+    }
+    h1{
+      font-size:22px;
+      margin-bottom:6px;
+    }
+    h2{
+      font-size:16px;
+      margin-top:20px;
+      border-left:4px solid #7c3aed;
+      padding-left:8px;
+    }
+    ul{
+      margin-left:18px;
+    }
+    li{
+      margin:6px 0;
+    }
+    .note{
+      margin:14px 0;
+      padding:12px 14px;
+      background:#f5f3ff;
+      border:1px solid #e5e7eb;
+      border-radius:8px;
+      font-size:14px;
+    }
+    .meta{
+      color:#6b7280;
+      font-size:13px;
+      margin-bottom:16px;
+    }
+    .diagram{
+      margin:16px 0;
+      padding:14px;
+      border:1px solid #e5e7eb;
+      border-radius:8px;
+      background:#fff;
+    }
+    code{
+      font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+      font-size: 0.95em;
+      background: #f3f4f6;
+      padding: 0 6px;
+      border-radius: 6px;
+    }
+  </style>
+</head>
+<body>
+
+<h1>Bausteine: Manifest, application.js & App Registry</h1>
+<div class="meta">Vertiefung · Technische Architektur</div>
+
+<p>
+Um die CMS-Idee umzusetzen, wurde das System bewusst in <strong>klar getrennte Bausteine</strong>
+aufgeteilt. Jeder Baustein übernimmt eine klar definierte Rolle – ähnlich wie in echten
+Content-Management-Systemen.
+</p>
+
+<h2>1) App Registry – der Einstiegspunkt</h2>
+<p>
+Die <strong>App Registry</strong> ist der zentrale Überblick über alle verfügbaren Apps
+(z. B. Lectures, Tools, Spotlight).
+</p>
+<ul>
+  <li>legt fest, <strong>welche Apps existieren</strong></li>
+  <li>verweist auf den jeweiligen App-Pfad</li>
+  <li>entspricht konzeptionell einem <em>App-Menü</em> oder Modulverzeichnis</li>
+</ul>
+
+<h2>2) application.js – das Manifest der App</h2>
+<p>
+Für jede App existiert eine eigene <code>application.js</code>.
+Diese Datei fungiert als <strong>Manifest</strong> der App.
+</p>
+<ul>
+  <li>definiert <strong>Sections</strong> (z. B. Vorlesungen)</li>
+  <li>definiert <strong>Pages</strong> innerhalb einer Section</li>
+  <li>verknüpft Pages mit Content über <code>src</code></li>
+</ul>
+
+<p>
+In einem klassischen CMS würde diese Information typischerweise
+in einer Datenbank liegen – hier ist sie bewusst als <strong>strukturierte JavaScript-Logik</strong>
+umgesetzt.
+</p>
+
+<h2>Beispiel: Manifest-Struktur in application.js</h2>
+<p>
+Das folgende Beispiel zeigt vereinfacht, wie Sections und Pages im Manifest
+definiert werden. Diese Struktur ersetzt im Prinzip eine CMS-Datenbank.
+</p>
+
+<pre><code>// application.js (vereinfacht)
+lectures.config = {
+  sections: [
+    {
+      id: "vl1",
+      title: "Vorlesung 1 – Einführung",
+      pages: [
+        {
+          id: "vl1-ueberblick",
+          title: "Überblick & Ziel der Vorlesung",
+          src: "content/vl1/ueberblick.html"
+        }
+      ]
+    }
+  ]
+};
+</code></pre>
+
+<h2>3) HTML-Seiten – reiner Content</h2>
+<p>
+Der eigentliche Inhalt liegt vollständig getrennt in eigenen HTML-Dateien:
+</p>
+<ul>
+  <li>keine Navigation</li>
+  <li>keine App-Logik</li>
+  <li>nur Text, Struktur und ggf. Grafiken</li>
+</ul>
+
+<p>
+Damit entspricht jede HTML-Datei inhaltlich einer klassischen
+<strong>CMS-Seite</strong>.
+</p>
+
+<h2>Beispiel: Registrierung der App</h2>
+<p>
+Die App Registry stellt sicher, dass die Lectures-App im System bekannt ist
+und geladen werden kann.
+</p>
+
+<pre><code>// index.html / app bootstrap
+window.APP_REGISTRY = {
+  lectures: {
+    id: "lectures",
+    title: "WebProg Lectures",
+    path: "resources/lectures"
+  }
+};
+</code></pre>
+
+<div class="diagram">
+<svg viewBox="0 0 720 260" width="100%" height="auto" role="img" aria-label="Zusammenspiel der CMS-Bausteine">
+  <defs>
+    <style>
+      .box{fill:#ffffff;stroke:#e5e7eb;stroke-width:2}
+      .title{font:14px system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif; fill:#1f2937}
+      .sub{font:12px system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif; fill:#6b7280}
+      .arrow{stroke:#7c3aed;stroke-width:3;marker-end:url(#arrow)}
+    </style>
+    <marker id="arrow" markerWidth="10" markerHeight="10" refX="9" refY="3" orient="auto">
+      <path d="M0,0 L10,3 L0,6 Z" fill="#7c3aed" />
+    </marker>
+  </defs>
+
+  <rect class="box" x="30" y="70" width="200" height="120" rx="12"/>
+  <text class="title" x="50" y="100">App Registry</text>
+  <text class="sub" x="50" y="125">Welche App?</text>
+
+  <rect class="box" x="260" y="50" width="220" height="160" rx="12"/>
+  <text class="title" x="280" y="80">application.js</text>
+  <text class="sub" x="280" y="105">Sections</text>
+  <text class="sub" x="280" y="125">Pages</text>
+  <text class="sub" x="280" y="145">src → Content</text>
+
+  <rect class="box" x="520" y="70" width="170" height="120" rx="12"/>
+  <text class="title" x="540" y="105">HTML-Seiten</text>
+  <text class="sub" x="540" y="130">Inhalte</text>
+
+  <line class="arrow" x1="230" y1="130" x2="260" y2="130"/>
+  <line class="arrow" x1="480" y1="130" x2="520" y2="130"/>
+</svg>
+</div>
+
+<h2>Kurzer Ausblick: Technische Herausforderungen</h2>
+<ul>
+  <li>Laden von HTML-Dateien ohne Webserver (file://)</li>
+  <li>Trennung von App-Titel und Seiten-Titel</li>
+  <li>Dynamisches Rendering ohne Framework</li>
+</ul>
+<p>
+Diese Punkte werden auf der nächsten Vertiefungsseite gezielt aufgegriffen.
+</p>
+
+<div class="note">
+<strong>Merksatz für die Präsentation:</strong><br>
+Die App Registry sagt <em>was</em> es gibt, das Manifest (<code>application.js</code>)
+beschreibt <em>wie</em> es aufgebaut ist, und die HTML-Seiten enthalten <em>was angezeigt wird</em>.
+</div>
+
+</body>
+</html>

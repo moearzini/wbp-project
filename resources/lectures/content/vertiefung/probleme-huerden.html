@@ -1,0 +1,118 @@
+<!doctype html>
+<html lang="de">
+<head>
+  <meta charset="utf-8" />
+  <title>Vertiefung – Probleme & Hürden</title>
+  <style>
+    body{
+      font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+      color:#1f2937;
+      line-height:1.55;
+    }
+    h1{
+      font-size:22px;
+      margin-bottom:6px;
+    }
+    h2{
+      font-size:16px;
+      margin-top:20px;
+      border-left:4px solid #7c3aed;
+      padding-left:8px;
+    }
+    ul{
+      margin-left:18px;
+    }
+    li{
+      margin:6px 0;
+    }
+    .note{
+      margin:14px 0;
+      padding:12px 14px;
+      background:#f5f3ff;
+      border:1px solid #e5e7eb;
+      border-radius:8px;
+      font-size:14px;
+    }
+    .meta{
+      color:#6b7280;
+      font-size:13px;
+      margin-bottom:16px;
+    }
+    code{
+      font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+      font-size: 0.95em;
+      background: #f3f4f6;
+      padding: 0 6px;
+      border-radius: 6px;
+    }
+  </style>
+</head>
+<body>
+
+<h1>Probleme & Hürden bei der CMS-Simulation</h1>
+<div class="meta">Vertiefung · Reflexion & technische Entscheidungen</div>
+
+<p>
+Im Laufe der Umsetzung sind wir auf mehrere technische und konzeptionelle Probleme gestoßen.
+Diese waren kein Nachteil, sondern ein zentraler Lernaspekt des Projekts,
+da sie typische Herausforderungen realer Webentwicklung widerspiegeln.
+</p>
+
+<h2>1) Laden von Inhalten ohne Webserver (file://)</h2>
+<p>
+Ein zentrales Problem war, dass das Projekt <strong>ohne Webserver</strong>
+ausgeführt werden musste. Dadurch waren klassische Methoden wie
+<code>fetch()</code> zum Laden externer HTML-Dateien nicht zuverlässig nutzbar
+(CORS / Origin <code>null</code>).
+</p>
+<ul>
+  <li><strong>Problem:</strong> HTML-Seiten konnten nicht per fetch geladen werden</li>
+  <li><strong>Lösung:</strong> Einbettung der Inhalte über <strong>iframes</strong></li>
+  <li><strong>Ergebnis:</strong> Seiten konnten stabil und serverlos geladen werden</li>
+</ul>
+
+<h2>2) Trennung von App-Titel und Seiten-Titel</h2>
+<p>
+Ein weiteres Problem war die doppelte Darstellung von Titeln:
+Der Seitentitel wurde sowohl von der App als auch aus der eingebetteten HTML-Seite angezeigt.
+</p>
+<ul>
+  <li><strong>Problem:</strong> redundante Titelanzeige im Content-Bereich</li>
+  <li><strong>Lösung:</strong> Ausblenden von <code>&lt;h1&gt;</code> und Metadaten
+      in eingebetteten Seiten über einen <code>?embed=1</code>-Parameter</li>
+  <li><strong>Ergebnis:</strong> saubere Trennung von Navigation und Inhalt</li>
+</ul>
+
+<h2>3) Pfadauflösung & Strukturierung</h2>
+<p>
+Da Inhalte, Manifeste und App-Logik in unterschiedlichen Ordnern lagen,
+führte dies anfangs zu Problemen bei der Pfadauflösung.
+</p>
+<ul>
+  <li><strong>Problem:</strong> relative Pfade funktionierten nicht konsistent</li>
+  <li><strong>Lösung:</strong> konsequente Auflösung der Content-Pfade über
+      die App-Basis (<code>resources/lectures</code>)</li>
+  <li><strong>Ergebnis:</strong> klare, wartbare Projektstruktur</li>
+</ul>
+
+<h2>4) Dynamisches Rendering ohne Framework</h2>
+<p>
+Das komplette Rendering wurde bewusst ohne Framework (z. B. React, Vue)
+umgesetzt. Dadurch mussten viele Aufgaben manuell gelöst werden.
+</p>
+<ul>
+  <li><strong>Problem:</strong> kein vorgefertigtes Routing oder State-Management</li>
+  <li><strong>Lösung:</strong> eigene Rendering-Logik in <code>app.js</code></li>
+  <li><strong>Ergebnis:</strong> besseres Verständnis für DOM, Events und Zustände</li>
+</ul>
+
+<div class="note">
+<strong>Reflexion:</strong><br>
+Die aufgetretenen Probleme haben gezeigt, dass selbst einfache CMS-Funktionen
+viele technische Detailfragen beinhalten. Gerade durch die bewusste
+Beschränkung auf reines JavaScript wurde das Architekturverständnis deutlich vertieft.
+</div>
+<br>
+
+</body>
+</html>

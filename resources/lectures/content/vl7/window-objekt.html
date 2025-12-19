@@ -1,0 +1,93 @@
+<!doctype html>
+<html lang="de">
+<head>
+  <meta charset="utf-8" />
+  <title>Window-Objekt & Browser-Steuerung</title>
+  <style>
+    body{
+      font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+      color:#1f2937;
+      line-height:1.55;
+    }
+    h1{
+      font-size:22px;
+      margin-bottom:6px;
+    }
+    h2{
+      font-size:16px;
+      margin-top:20px;
+      border-left:4px solid #7c3aed;
+      padding-left:8px;
+    }
+    ul{
+      margin-left:18px;
+    }
+    li{
+      margin:6px 0;
+    }
+    .note{
+      margin:12px 0;
+      padding:10px 12px;
+      background:#f5f3ff;
+      border:1px solid #e5e7eb;
+      border-radius:8px;
+      font-size:14px;
+    }
+    .meta{
+      color:#6b7280;
+      font-size:13px;
+      margin-bottom:16px;
+    }
+    .box{
+      border:1px solid #e5e7eb;
+      border-radius:8px;
+      padding:10px 12px;
+      background:#fff;
+      margin:12px 0;
+    }
+    .sources{
+      margin-top:18px;
+      font-size:13px;
+      color:#4b5563;
+    }
+    .sources ul{ margin-left:18px; }
+    code{
+      font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+      font-size: 0.95em;
+      background: #f3f4f6;
+      padding: 0 6px;
+      border-radius: 6px;
+    }
+    /* Wenn die Seite im App-Iframe eingebettet ist, blendet die App den Titel bereits aus */
+    html.embedded h1,
+    html.embedded .meta{
+      display:none;
+    }
+  </style>
+  <script>
+    (() => {
+      const params = new URLSearchParams(window.location.search);
+      if (params.get("embed") === "1") document.documentElement.classList.add("embedded");
+    })();
+  </script>
+</head>
+<body>
+
+<h1>Window-Objekt & Browser-Steuerung</h1>
+<div class="meta">Web-Programmierung · Vorlesung 7 · Browser APIs</div>
+
+
+<p>Das <strong>Window-Objekt</strong> stellt Browser-Funktionen bereit (Navigation, Dialoge, Infos).</p>
+<h2>Wichtig</h2>
+<ul>
+  <li>Navigation/URL über <code>window.location</code></li>
+  <li>Verlauf über <code>window.history</code></li>
+  <li>Dialoge über <code>alert</code>/<code>confirm</code>/<code>prompt</code></li>
+</ul>
+<div class="box">
+  <img src="schaubild2.png" alt="Schaubild: Window-Objekt Beispiele" style="max-width:100%;height:auto;display:block;">
+</div>
+
+
+</body>
+</html>

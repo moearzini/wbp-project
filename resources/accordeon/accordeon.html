@@ -1,0 +1,127 @@
+﻿<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>Accordion</title>
+
+<link href="akkordeon.css" rel="stylesheet" type="text/css">
+<style type="text/css">
+body {
+  font-family: Arial, Helvetica, sans-serif;
+  background: #f4f6f8;
+  color: #333;
+}
+
+#akkordeon {
+  width: 600px;
+  margin: 40px auto;
+  background: #ffffff;
+  border-radius: 6px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+  overflow: hidden;
+}
+
+#akkordeon h2 {
+  margin: 0;
+  padding: 14px 18px;
+  font-size: 18px;
+  background: #e9ecef;
+  border-bottom: 1px solid #dcdcdc;
+  cursor: pointer;
+  transition: background 0.2s ease;
+}
+
+#akkordeon h2:hover {
+  background: #dfe3e8;
+}
+
+#akkordeon h2.aktuell {
+  background: #003366;
+  color: #ffffff;
+}
+
+#akkordeon div {
+  padding: 16px 18px;
+  line-height: 1.6;
+  background: #fafafa;
+  border-bottom: 1px solid #dcdcdc;
+}
+
+#akkordeon div p:last-child {
+  margin-bottom: 0;
+}
+
+h1 {
+  text-align: center;
+  margin-top: 30px;
+  font-size: 26px;
+}
+
+p {
+  font-size: 14px;
+}
+</style>
+
+<script type="text/javascript">
+document.addEventListener("DOMContentLoaded", function () {
+  var acc = document.getElementById("akkordeon");
+  var headers = acc.querySelectorAll(":scope > h2");
+
+  headers.forEach(function (h) {
+    var panel = h.nextElementSibling;
+    panel.style.display = "none";
+    h.classList.remove("aktuell");
+
+    h.style.cursor = "pointer";
+
+    h.addEventListener("click", function () {
+      var isOpen = h.classList.contains("aktuell");
+
+      headers.forEach(function (other) {
+        other.classList.remove("aktuell");
+        other.nextElementSibling.style.display = "none";
+      });
+
+      if (!isOpen) {
+        h.classList.add("aktuell");
+        panel.style.display = "block";
+      }
+    });
+  });
+
+  // initial open: header with class 'oeffne', fallback first
+  var start = acc.querySelector("h2.oeffne") || headers[0];
+  start.classList.add("aktuell");
+  start.nextElementSibling.style.display = "block";
+});
+</script>
+
+</head>
+<body id="twoCol">
+
+<h1>jQuery-Akkordeon</h1>
+<div id="akkordeon">
+  <h2>Akkordeon 1</h2>
+  <div>
+    <p>Ut enim ad minim veniam, quis nostrud exercitation in reprehenderit in voluptate. Velit esse cillum dolore lorem ipsum dolor sit amet, sed do eiusmod tempor incididunt.</p>
+    <p>Ut enim ad minim veniam, quis nostrud exercitation in reprehenderit in voluptate. Velit esse cillum dolore lorem ipsum dolor sit amet, sed do eiusmod tempor incididunt.</p>
+    <p>Ut enim ad minim veniam, quis nostrud exercitation in reprehenderit in voluptate. Velit esse cillum dolore lorem ipsum dolor sit amet, sed do eiusmod tempor incididunt.Ut enim ad minim veniam, quis nostrud exercitation in reprehenderit in voluptate. Velit esse cillum dolore lorem ipsum dolor sit amet, sed do eiusmod tempor incididunt.</p>
+    <p>Ut enim ad minim veniam, quis nostrud exercitation in reprehenderit in voluptate. Velit esse cillum dolore lorem ipsum dolor sit amet, sed do eiusmod tempor incididunt.Ut enim ad minim veniam, quis nostrud exercitation in reprehenderit in voluptate. Velit esse cillum dolore lorem ipsum dolor sit amet, sed do eiusmod tempor incididunt END.</p>
+  </div>
+  <h2>Akkordeon 2</h2>
+  <div>
+    <p>Ut enim ad minim veniam, quis nostrud exercitation in reprehenderit in voluptate. Velit esse cillum dolore lorem ipsum dolor sit amet, sed do eiusmod tempor incididunt.</p>
+    <p>Ut enim ad minim veniam, quis nostrud exercitation in reprehenderit in voluptate. Velit esse cillum dolore lorem ipsum dolor sit amet, sed do eiusmod tempor incididunt.</p>
+  </div>
+  <h2 class="oeffne">Akkordeon 3</h2>
+  <div>
+    <p>Ut enim ad minim veniam, quis nostrud exercitation in reprehenderit in voluptate. Velit esse cillum dolore lorem ipsum dolor sit amet, sed do eiusmod tempor incididunt.</p>
+    <p>Ut enim ad minim veniam, quis nostrud exercitation in reprehenderit in voluptate. Velit esse cillum dolore lorem ipsum dolor sit amet, sed do eiusmod tempor incididunt.</p>
+    <p>Ut enim ad minim veniam, quis nostrud exercitation in reprehenderit in voluptate. Velit esse cillum dolore lorem ipsum dolor sit amet, sed do eiusmod tempor incididunt.Ut enim ad minim veniam, quis nostrud exercitation in reprehenderit in voluptate. Velit esse cillum dolore lorem ipsum dolor sit amet, sed do eiusmod tempor incididunt.</p>
+    <p>Ut enim ad minim veniam, quis nostrud exercitation in reprehenderit in voluptate. Velit esse cillum dolore lorem ipsum dolor sit amet, sed do eiusmod tempor incididunt.Ut enim ad minim veniam, quis nostrud exercitation in reprehenderit in voluptate. Velit esse cillum dolore lorem ipsum dolor sit amet, sed do eiusmod tempor incididunt.</p>
+    <p>Ut enim ad minim veniam, quis nostrud exercitation in reprehenderit in voluptate. Velit esse cillum dolore lorem ipsum dolor sit amet, sed do eiusmod tempor END.</p>
+  </div>
+</div>
+<p>Akkordeon mit ui.accordion.js.</p>
+</body>
+</html>
